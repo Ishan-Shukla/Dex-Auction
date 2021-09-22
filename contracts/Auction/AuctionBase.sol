@@ -11,6 +11,7 @@ contract AuctionBase is AuctionCore, Pausable {
     // Creaters a reference to the NFT ownership contract(NFC).
     constructor(address assetAuctionAddress){
         asset = ERC721(assetAuctionAddress);
+        assetBase = AssetBase(assetAuctionAddress);
         setOwner(assetAuctionAddress);
     }
 
@@ -32,7 +33,9 @@ contract AuctionBase is AuctionCore, Pausable {
         require(_duration == uint256(uint64(_duration)),"Duration not in Range");
 
         // Require that all auctions have a duration of at least 1 hour.
-        require(_duration >= 1 hours,"Duration must be equal or greater than 1 hours");
+
+        require(_duration >= 1 minutes,"Duration must be equal or greater than 1 hours");
+        
         // NFT is escrowed i.e. kept by the contract.
         _escrow(_tokenId);
 
@@ -94,6 +97,7 @@ contract AuctionBase is AuctionCore, Pausable {
         require(success,"Withdrawal Failed");
     }
 
+    // checks if NFT is on auction
     function isOnAuction(uint256 _tokenId)
         external
         view
@@ -102,6 +106,7 @@ contract AuctionBase is AuctionCore, Pausable {
         return _isOnAuction(_tokenId);
     }
 
+    // Get all details of NFT on Auction
     function getAuction(uint256 _tokenId)
         external
         view
@@ -110,6 +115,7 @@ contract AuctionBase is AuctionCore, Pausable {
         return Auctions[tokenIdToAuction[_tokenId]];
     }
 
+    // returns all assets on auction owned by the owner
     function assetsOnAuction()
         external
         view
@@ -123,12 +129,22 @@ contract AuctionBase is AuctionCore, Pausable {
         return result;
     }
 
+    // returns all auctions to view on marketPlace
     function getAllAuctions()
         external
         view
         returns(Auction[] memory)
     {
         return Auctions;
+    }
+
+    // returns balance of msg sender
+    function auctionBalance(address account)
+        external
+        view
+        returns(uint256)
+    {
+        return onAuctionCount[account];
     }
 
 }

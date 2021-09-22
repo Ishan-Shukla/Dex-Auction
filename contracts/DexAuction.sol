@@ -124,8 +124,10 @@ contract DeXAuction is AssetBase {
         uint256 balance = balanceOf(_Owner);
 
         // Balance should be more than 0
-        require(balance>0,"No Asset Owned");
-
+        // require(balance>0,"No Asset Owned");
+        if(balance == 0 ){
+            return new Asset[](0);
+        }
         Asset[] memory result = new Asset[](balance);
 
         for (uint256 i = 0; i < balance; i++){
@@ -134,6 +136,14 @@ contract DeXAuction is AssetBase {
         }
         // Return result array that contains all TokenIDs
         return result;
+    }
+
+    function getAsset(uint256 tokenId)
+    external
+    view
+    whenNotPaused
+    returns(Asset memory){
+        return Assets[tokenId];
     }
 
     function getAllAssets()

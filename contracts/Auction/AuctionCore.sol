@@ -13,6 +13,8 @@ contract AuctionCore {
     Counters.Counter private auctionIndex;
     // Reference to AssetAuction for comunicating with NFC
     ERC721 public asset;
+    
+    AssetBase public assetBase;
 
     // status for providing re-entracy guard 
     // True- inside Function
@@ -59,15 +61,15 @@ contract AuctionCore {
     }
 
     // Stores All Auctions
-    Auction[] internal Auctions;
+    Auction[] public Auctions;
     // Map TokenID to their respective auction
-    mapping(uint256 => uint256) internal tokenIdToAuction;
+    mapping(uint256 => uint256) public tokenIdToAuction;
 
     // Map all assets on auction of an address
-    mapping(address=>mapping(uint256=>uint256)) internal assetOnAuction;
+    mapping(address=>mapping(uint256=>uint256)) public assetOnAuction;
 
     // Keep count of total no. of NFT put on auction by an address
-    mapping(address=>uint256) internal onAuctionCount;
+    mapping(address=>uint256) public onAuctionCount;
     
     // Modifier for Re-entracy lock
     // Working- Initially status is false so entry is allowed.
@@ -99,6 +101,7 @@ contract AuctionCore {
         internal
     {
         asset.transferFrom(msg.sender, address(this), _tokenId);
+        assetBase.Escrowed(_tokenId, msg.sender);
     }
 
     // Transfers an asset(NFT) owned by this contract to another address
@@ -106,6 +109,7 @@ contract AuctionCore {
         internal 
     {
         asset.transferFrom(address(this), _receiver, _tokenId);
+        assetBase.Transfered(_tokenId, _receiver);
     }
 
     // Removes an auction from the list of open auctions.
@@ -117,7 +121,7 @@ contract AuctionCore {
         // Temporary auction struct.
         Auction memory auction = Auctions[tokenIdToAuction[_tokenId]];
 
-        // If startAt == means no bid received & auction 
+        // If startAt == 0 means no bid received & auction 
         // has not started countdown.
         if(auction.startAt == 0){
             _arrangeAuctions(_tokenId);
@@ -190,7 +194,7 @@ contract AuctionCore {
         auction = Auctions[auctionIndex.current()];
         uint256 pos = tokenIdToAuction[tokenId];
         Auctions[pos] = auction;
-        delete Auctions[auctionIndex.current()];
+        Auctions.pop();
         auctionIndex.decrement();
         tokenIdToAuction[auction.tokenId] = pos;
         delete tokenIdToAuction[tokenId];

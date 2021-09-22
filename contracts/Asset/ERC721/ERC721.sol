@@ -15,25 +15,25 @@ contract ERC721 is ERC165, IERC721Metadata {
     using Strings for uint256;
 
     // Token name
-    string private _name;
+    string public _name;
 
     // Token symbol
-    string private _symbol;
+    string public _symbol;
 
     // Mapping from token ID to owner address
-    mapping(uint256 => address) private _owners;
+    mapping(uint256 => address) public _owners;
 
     // Mapping owner address to token count
-    mapping(address => uint256) private _balances;
+    mapping(address => uint256) public _balances;
 
     // Mapping from token ID to approved address
-    mapping(uint256 => address) private _tokenApprovals;
+    mapping(uint256 => address) public _tokenApprovals;
 
     // Mapping from owner to operator approvals
-    mapping(address => mapping(address => bool)) private _operatorApprovals;
+    mapping(address => mapping(address => bool)) public _operatorApprovals;
 
     // Mapping for token URIs
-    mapping(uint256 => string) private _tokenURIs;
+    mapping(uint256 => string) public _tokenURIs;
 
     /**
      * @dev Initializes the contract by setting a `name` and a `symbol` to the token collection.
@@ -121,7 +121,7 @@ contract ERC721 is ERC165, IERC721Metadata {
      * by default, can be overriden in child contracts.
      */
     function _baseURI() internal view virtual returns (string memory) {
-        return "https://ipfs.io/ipfs/";
+        return "https://ipfs.infura.io/ipfs/";
     }
 
     /**

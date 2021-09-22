@@ -98,7 +98,7 @@ describe("DeX-Auction test", function () {
           }
           return asset;
         })).then(console.log("Creation Successfull"));
-          console.log("Assets: ",assets);
+          // console.log("Assets: ",assets);
         // console.log(await AssetContract.getOwnerAssets());
         // console.log(await AssetContract.connect(seller).getOwnerAssets());
         // console.log(await AssetContract.getAllAssets());
@@ -137,6 +137,8 @@ describe("DeX-Auction test", function () {
         )
           .to.emit(AuctionContract, "AuctionCreated")
           .withArgs(1, ethers.utils.parseEther("0.5"), 7200);
+        // const count= await AuctionContract.connect(seller).auctionBalance(seller.address);
+        // console.log(count.toNumber());
       });
       it("Only seller should be able to create Auction", async function () {
         await AssetContract.connect(seller).Mint("IronMan");

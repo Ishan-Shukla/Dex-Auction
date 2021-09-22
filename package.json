@@ -4,7 +4,10 @@
   "description": "NFT Auction Marketplace",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "node": "npx hardhat node ",
+    "deploy": "npx hardhat run scripts/deploy.js --network localhost",
+    "ipfs": "ipfs daemon",
+    "start": "cd front-end && yarn start"
   },
   "repository": {
     "type": "git",
@@ -27,6 +30,7 @@
   "dependencies": {
     "@openzeppelin/contracts": "^4.3.1",
     "axios": "^0.21.4",
+    "concurrently": "^6.2.1",
     "ipfs-http-client": "^52.0.3",
     "web3modal": "^1.9.4"
   }
