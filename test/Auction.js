@@ -87,21 +87,26 @@ describe("DeX-Auction test", function () {
           .withArgs(seller.address, 6);
         assets = await AssetContract.getAllAssets();
         assets = await Promise.all(assets.filter(i => {
-          if(i.TokenID.toString() == 0){return false;}
+          if(i.tokenId.toString() == 0){return false;}
           return true;
         }).map(async i => {
-          const tokenURI = await AssetContract.tokenURI(i.TokenID);
+          const tokenURI = await AssetContract.tokenURI(i.tokenId);
           let asset = {
-            tokenId: i.TokenID.toString(),
+            tokenId: i.tokenId.toString(),
             owner: i.owner,
             tokenURI
           }
           return asset;
+<<<<<<< HEAD
         })).then(console.log("Creation Successfull"));
           // console.log("Assets: ",assets);
         // console.log(await AssetContract.getOwnerAssets());
         // console.log(await AssetContract.connect(seller).getOwnerAssets());
         // console.log(await AssetContract.getAllAssets());
+=======
+        }));
+
+>>>>>>> Front-End
       });
       it("Should not burn non-existent NFT", async function () {
         await expect(AssetContract.connect(seller).Burn(5)).to.be.revertedWith(

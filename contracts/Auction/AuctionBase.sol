@@ -34,7 +34,11 @@ contract AuctionBase is AuctionCore, Pausable {
 
         // Require that all auctions have a duration of at least 1 hour.
 
+<<<<<<< HEAD
         require(_duration >= 1 minutes,"Duration must be equal or greater than 1 hours");
+=======
+        require(_duration >= 1 hours,"Duration must be equal or greater than 1 hours");
+>>>>>>> Front-End
         
         // NFT is escrowed i.e. kept by the contract.
         _escrow(_tokenId);

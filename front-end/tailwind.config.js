@@ -6,6 +6,7 @@ module.exports = {
       backgroundImage: {
         "Subtle-Background": "url('/src/img/Subtle.svg')",
         "Logo": "url('/src/img/Logo.svg')",
+<<<<<<< HEAD
       },
       boxShadow:{
         bar: "0 8px 32px 0 rgba( 31, 38, 135, 0.37 )",
@@ -14,15 +15,31 @@ module.exports = {
         'Hanseif-Rough': ['Hansief-Rough'],
         'Hanseif': ['Hansief'],
         'sans': ['Roboto', 'Helvetica', 'Arial', 'sans-serif'],
+=======
+        "Pattern-Background": "url('/src/img/Pattern-Squared.svg')",
+        "Turquoise-Blurred": "url('/src/img/TurquoiseBlurred.svg')",
+      },
+      boxShadow: {
+        "bar": "0 8px 32px 0 rgba( 31, 38, 135, 0.37 )",
+      },
+      fontFamily: {
+        "Hanseif-Rough": ["Hansief-Rough"],
+        "Hanseif": ["Hansief"],
+        "sans": ["Roboto", "Helvetica", "Arial", "sans-serif"],
+>>>>>>> Front-End
       },
     },
     variants: {
       extend: {},
     },
+<<<<<<< HEAD
     plugins: [
       require('@mjwebs/tailwindcss-frosted'),
       require('tailwind-scrollbar'),
       require('tailwind-scrollbar-hide'),
     ],
+=======
+    plugins: [require("@tailwindcss/forms")],
+>>>>>>> Front-End
   },
 };

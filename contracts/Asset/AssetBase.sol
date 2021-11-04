@@ -20,7 +20,7 @@ contract AssetBase is AccessControl,ERC721 {
     // Asset structure (might change in future)
     struct Asset {
         // string ipfs;
-        uint256 TokenID;
+        uint256 tokenId;
         address owner;
     }
 
@@ -69,20 +69,20 @@ contract AssetBase is AccessControl,ERC721 {
         _tokenIds.increment();
 
         // New TokenID
-        uint256 TokenId = _tokenIds.current();
+        uint256 tokenId = _tokenIds.current();
 
         // Mints Token for owner/owner of Asset
-        _mint(owner, TokenId);
+        _mint(owner, tokenId);
 
         // Adds TokenURI for the asset
-        _setTokenURI(TokenId,_ipfsURI);
+        _setTokenURI(tokenId,_ipfsURI);
 
         // Adds Asset TokenID to respective owner address;
-        ownsToken[owner][balanceOf(owner)] = TokenId;
+        ownsToken[owner][balanceOf(owner)] = tokenId;
 
         // Asset data to be stored
         Asset memory _asset = Asset(
-            TokenId,
+            tokenId,
             owner
         );
 
@@ -90,10 +90,10 @@ contract AssetBase is AccessControl,ERC721 {
         Assets.push(_asset);
 
         // Fires Minted Event
-        emit Minted(owner,TokenId);
+        emit Minted(owner,tokenId);
 
         // Return New TokenID
-        return TokenId;
+        return tokenId;
     }
 
     // Burn Asset and Remove traces of corresponding asset

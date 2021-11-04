@@ -6,26 +6,48 @@ import { MetamaskProvider } from "../../App";
 import { UserAccount } from "../../App";
 import { ethers } from "ethers";
 import { useParams, useHistory } from "react-router";
+<<<<<<< HEAD
 import placeHolder from "../../img/PlaceHolder.svg";
+=======
+import { formatEther } from "@ethersproject/units";
+import Countdown from "react-countdown";
+import axios from "axios";
+import loading from "../../img/Loading.svg";
+import UseTitle from "../../Components/Title/UseTitle";
+>>>>>>> Front-End
 
 require("dotenv");
 const asset = process.env.REACT_APP_DEX_AUCTION;
 const auction = process.env.REACT_APP_AUCTION_BASE;
 
 export const NFTViewMarketPlace = (props) => {
+<<<<<<< HEAD
   const [onAuction, setAuction] = useState();
+=======
+  const [NFTonAuction, setAuction] = useState();
+>>>>>>> Front-End
   const [loadingState, setLoadingState] = useState("not-loaded");
   const [priceInput, updatePriceInput] = useState({
     price: "",
   });
   const [lock, setLock] = useState(false);
   const [claim, setClaim] = useState(false);
+<<<<<<< HEAD
 
+=======
+  const [countdownTime, setCountdownTime] = useState(0);
+>>>>>>> Front-End
   const history = useHistory();
   const provider = useContext(MetamaskProvider);
   const Account = useContext(UserAccount);
   const { id } = useParams();
 
+<<<<<<< HEAD
+=======
+  // Set Title
+  UseTitle(`Auction NFT ${id}`);
+
+>>>>>>> Front-End
   useEffect(() => {
     if (loadingState === "not-loaded") {
       loadNFTs();
@@ -44,6 +66,7 @@ export const NFTViewMarketPlace = (props) => {
   async function loadNFTs() {
     const Provider = new ethers.providers.JsonRpcProvider();
     let contract = new ethers.Contract(auction, AUCTION.abi, Provider);
+<<<<<<< HEAD
     const data = await contract.getAuction(id);
     contract = new ethers.Contract(asset, ASSET.abi, Provider);
     const URI = await contract.tokenURI(id);
@@ -52,10 +75,26 @@ export const NFTViewMarketPlace = (props) => {
       seller: data.seller.toString(),
       reservePrice: data.startingPrice.toString(),
       maxBidPrice: data.maxBidPrice.toString(),
+=======
+
+    const data = await contract.getAuction(id);
+
+    contract = new ethers.Contract(asset, ASSET.abi, Provider);
+
+    const tokenURI = await contract.tokenURI(id);
+    const meta = await axios.get(tokenURI);
+
+    const auctionNFT = {
+      tokenId: data.tokenId.toNumber(),
+      seller: data.seller.toString(),
+      reservePrice: formatEther(data.startingPrice.toString()),
+      maxBidPrice: formatEther(data.maxBidPrice.toString()),
+>>>>>>> Front-End
       maxBidder: data.maxBidder.toString(),
       duration: data.duration.toNumber(),
       startAt: data.startAt.toNumber(),
       status: data.auctionStatus.toString(),
+<<<<<<< HEAD
       tokenURI: URI,
     };
     const address = ethers.utils.getAddress(Account.toString());
@@ -72,6 +111,39 @@ export const NFTViewMarketPlace = (props) => {
       }
     }
     setAuction(auc);
+=======
+      image: `http://127.0.0.1:8080/ipfs/${meta.data.NFTHash}`,
+      name: meta.data.name,
+      description: meta.data.description,
+    };
+
+    if (isSeller(auctionNFT.seller)) {
+      setLock(true);
+    }
+
+    const getBlockchainTime = async () => {
+      const block = await provider.getBlockNumber();
+      const received = await provider.getBlock(block);
+      return received.timestamp;
+    };
+    const time = await getBlockchainTime();
+    const auctionPeriod = auctionNFT.startAt + auctionNFT.duration;
+
+    // console.log(time);
+
+    if (auctionNFT.startAt !== 0) {
+      if (auctionPeriod < time) {
+        const address = ethers.utils.getAddress(Account.toString());
+        if (auctionNFT.maxBidder === address) {
+          setClaim(true);
+        }
+        setLock(true);
+      } else {
+        setCountdownTime(auctionPeriod - time);
+      }
+    }
+    setAuction(auctionNFT);
+>>>>>>> Front-End
     setLoadingState("loaded");
   }
 
@@ -104,6 +176,7 @@ export const NFTViewMarketPlace = (props) => {
     return (
       <div>
         <GoBack change={changeState} url="/Market" />
+<<<<<<< HEAD
         <div className="flex pt-36 pl-32 pr-32 pb-14 min-h-screen justify-center">
           <div className="w-full flex justify-center border h-max p-4">
             <img src={placeHolder} alt="PlaceHolder"></img>
@@ -140,6 +213,50 @@ export const NFTViewMarketPlace = (props) => {
                 </>
               )}
               <div>
+=======
+        <div className="flex pt-36 pl-32 pr-32 pb-14 h-screen justify-center">
+          <div className="w-full flex justify-center h-max p-4 border-r-2">
+            <img src={NFTonAuction.image} alt="PlaceHolder"></img>
+          </div>
+          <div className="p-4 w-full cursor-default">
+            <div className="flex w-full h-full flex-col font-semibold">
+              <div className="flex border-b-2">
+                <div className="text-5xl font-Hanseif pb-1 mr-5">
+                  #{NFTonAuction.tokenId}
+                </div>
+                <div className="text-5xl font-Hanseif pb-1 flex-1">
+                  {NFTonAuction.name}
+                </div>
+              </div>
+              <div className="p-2">"{NFTonAuction.description}"</div>
+              <div className="p-2">
+                <div>Owner</div>
+                <div className="pl-4">{NFTonAuction.seller}</div>
+              </div>
+              {!isSeller(NFTonAuction.seller) ? (
+                <div className="p-2">Seller- {NFTonAuction.seller}</div>
+              ) : null}
+              {NFTonAuction.startAt === 0 ? (
+                <div className="p-2">
+                  Reserve Price- {NFTonAuction.reservePrice} ETH
+                </div>
+              ) : (
+                <>
+                  <div className="p-2">Bidder- {NFTonAuction.maxBidder}</div>
+                  <div className="p-2">
+                    Current Price- {NFTonAuction.maxBidPrice} ETH
+                  </div>
+                  <div className="p-2">
+                    Time Left-
+                    <Countdown
+                      date={Date.now() + countdownTime * 1000}
+                      className="font-bold"
+                    />
+                  </div>
+                </>
+              )}
+              <div className="mt-auto">
+>>>>>>> Front-End
                 {lock ? null : (
                   <div className="flex">
                     <input
@@ -168,7 +285,15 @@ export const NFTViewMarketPlace = (props) => {
         </div>
       </div>
     );
+<<<<<<< HEAD
   return <h1>Loading</h1>;
+=======
+  return (
+    <div className="min-h-screen w-full flex items-center justify-center">
+      <img src={loading} alt="Loading" className="h-20" />
+    </div>
+  );
+>>>>>>> Front-End
 };
 
 export default NFTViewMarketPlace;

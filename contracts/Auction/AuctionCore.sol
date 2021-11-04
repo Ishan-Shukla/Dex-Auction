@@ -221,6 +221,8 @@ contract AuctionCore {
     //   1. If the Auction is not yet started.
     //   2. If the Auction has started but not over.
     //      Then it firsts refund Bidder price.
+    //   3. If auction is over but winner didn't claim NFT within the caliming period
+    //      in such case seller receives 25% cut of bid amount and 50% returned to bidder
     function _cancelAuction(uint256 _tokenId, address _seller)
         internal 
     {
